@@ -1,4 +1,4 @@
-import { ReservationData } from "../components/ReservationDrawer"
+import { ReservationData } from "../types/reservation"
 
 const siteNames = ['Site A', 'Site B', 'Site C', 'Site D', 'Site E']
 const guestFirstNames = ['Alex', 'Jordan', 'Taylor', 'Morgan', 'Casey', 'Riley', 'Drew', 'Harper', 'Quinn', 'Avery']
