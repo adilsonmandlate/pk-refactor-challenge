@@ -1,5 +1,5 @@
-import { ReservationData } from "../components/ReservationDrawer"
 import { db } from "../db/mockdb"
+import { ReservationData } from "../types/reservation"
 
 type GetReservationsParams = {
   page?: number
