@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import ReservationList from './ReservationList'
-import ReservationDrawer from './ReservationDrawer'
+import ReservationList from '../components/reservation/ReservationList'
+import ReservationDrawer from '../components/reservation/ReservationDrawer'
+
 
 const ReservationListPage: React.FC<{}> = ({}) => {
   const [drawerOpen, setDrawerOpen] = useState(false)

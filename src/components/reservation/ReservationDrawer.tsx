@@ -1,22 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { getReservation, saveReservation } from '../api/fakeApi'
-
-export interface ReservationData {
-  id: string
-  guestName: string
-  siteName: string
-  startDate: string // ISO
-  endDate: string   // ISO
-  checkinTime: string // '15:00'
-  checkoutTime: string // '11:00'
-  basePrice: number // per night
-  nights: number
-  fees: number // flat
-  total?: number
-}
-
-const currency = (n: number) => new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' }).format(n)
-const classNames = (...xs: Array<string | false | null | undefined>) => xs.filter(Boolean).join(' ')
+import { getReservation, saveReservation } from '../../api/fakeApi'
+import { ReservationData } from '../../types/reservation'
+import { classNames, formatCurrency } from '../../utils'
+import { Input } from '../ui/Input'
 
 const ReservationDrawer: React.FC<{
   open: boolean
@@ -137,97 +123,97 @@ const ReservationDrawer: React.FC<{
             <form onSubmit={handleSave} className='space-y-4'>
               <div className='grid grid-cols-1 gap-4'>
                 <div>
-                  <label className='mb-1 block text-sm font-medium text-gray-800'>Guest name</label>
-                  <input
+                  <label htmlFor='guestName' className='mb-1 block text-sm font-medium text-gray-800'>Guest name</label>
+                  <Input
+                    name='guestName'
+                    onChange={setGuestName}
                     value={guestName}
-                    onChange={e => setGuestName(e.target.value)}
-                    className='w-full rounded-lg border border-gray-300 bg-white px-3 py-2 shadow-sm outline-none focus:ring-2 focus:ring-indigo-200'
                   />
                 </div>
 
                 <div>
-                  <label className='mb-1 block text-sm font-medium text-gray-800'>Site name</label>
-                  <input
+                  <label htmlFor='siteName' className='mb-1 block text-sm font-medium text-gray-800'>Site name</label>
+                  <Input
+                    name='siteName'
+                    onChange={setSiteName}
                     value={siteName}
-                    onChange={e => setSiteName(e.target.value)}
-                    className='w-full rounded-lg border border-gray-300 bg-white px-3 py-2 shadow-sm outline-none focus:ring-2 focus:ring-indigo-200'
                   />
                 </div>
 
                 <div className='grid grid-cols-2 gap-4'>
                   <div>
-                    <label className='mb-1 block text-sm font-medium text-gray-800'>Start date</label>
-                    <input
+                    <label htmlFor='startDate' className='mb-1 block text-sm font-medium text-gray-800'>Start date</label>
+                    <Input
                       type='date'
+                      name='startDate'
+                      onChange={setStartDate}
                       value={startDate}
-                      onChange={e => setStartDate(e.target.value)}
-                      className='w-full rounded-lg border border-gray-300 bg-white px-3 py-2 shadow-sm outline-none focus:ring-2 focus:ring-indigo-200'
                     />
                   </div>
                   <div>
-                    <label className='mb-1 block text-sm font-medium text-gray-800'>End date</label>
-                    <input
+                    <label htmlFor='endDate' className='mb-1 block text-sm font-medium text-gray-800'>End date</label>
+                    <Input
                       type='date'
+                      name='endDate'
+                      onChange={setEndDate}
                       value={endDate}
-                      onChange={e => setEndDate(e.target.value)}
-                      className='w-full rounded-lg border border-gray-300 bg-white px-3 py-2 shadow-sm outline-none focus:ring-2 focus:ring-indigo-200'
                     />
                   </div>
                 </div>
 
                 <div className='grid grid-cols-2 gap-4'>
                   <div>
-                    <label className='mb-1 block text-sm font-medium text-gray-800'>Check-in time</label>
-                    <input
+                    <label htmlFor='checkinTime' className='mb-1 block text-sm font-medium text-gray-800'>Check-in time</label>
+                    <Input
                       type='time'
+                      name='checkinTime'
+                      onChange={setCheckinTime}
                       value={checkinTime}
-                      onChange={e => setCheckinTime(e.target.value)}
-                      className='w-full rounded-lg border border-gray-300 bg-white px-3 py-2 shadow-sm outline-none focus:ring-2 focus:ring-indigo-200'
                     />
                   </div>
                   <div>
-                    <label className='mb-1 block text-sm font-medium text-gray-800'>Check-out time</label>
-                    <input
+                    <label htmlFor='checkoutTime' className='mb-1 block text-sm font-medium text-gray-800'>Check-out time</label>
+                    <Input
                       type='time'
+                      name='checkoutTime'
+                      onChange={setCheckoutTime}
                       value={checkoutTime}
-                      onChange={e => setCheckoutTime(e.target.value)}
-                      className='w-full rounded-lg border border-gray-300 bg-white px-3 py-2 shadow-sm outline-none focus:ring-2 focus:ring-indigo-200'
                     />
                   </div>
                 </div>
 
                 <div className='grid grid-cols-3 gap-4'>
                   <div>
-                    <label className='mb-1 block text-sm font-medium text-gray-800'>Nights</label>
-                    <input
-                      inputMode='numeric'
+                    <label htmlFor='nights' className='mb-1 block text-sm font-medium text-gray-800'>Nights</label>
+                    <Input
+                      type='number'
+                      name='nights'
+                      onChange={(value) => setNights(Number(value))}
                       value={String(nights)}
-                      onChange={e => setNights(Number(e.target.value))}
-                      className='w-full rounded-lg border border-gray-300 bg-white px-3 py-2 shadow-sm outline-none focus:ring-2 focus:ring-indigo-200'
                     />
                   </div>
 
                   <div>
-                    <label className='mb-1 block text-sm font-medium text-gray-800'>Fees</label>
-                    <input
-                      inputMode='numeric'
+                    <label htmlFor='fees' className='mb-1 block text-sm font-medium text-gray-800'>Fees</label>
+                    <Input
+                      type='number'
+                      name='fees'
+                      onChange={(value) => setFees(Number(value))}
                       value={String(fees)}
-                      onChange={e => setFees(Number(e.target.value))}
-                      className='w-full rounded-lg border border-gray-300 bg-white px-3 py-2 shadow-sm outline-none focus:ring-2 focus:ring-indigo-200'
                     />
                   </div>
 
                   <div>
                     <label className='mb-1 block text-sm font-medium text-gray-800'>Price/night</label>
                     <div className='rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-gray-800'>
-                      {currency(data.basePrice ?? 0)}
+                      {formatCurrency(data.basePrice ?? 0)}
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className='mt-2 flex items-center justify-between rounded-xl border border-gray-200 bg-white p-3 shadow-sm'>
-                <div className='text-base'>Total: <span className='font-semibold'>{currency(total)}</span></div>
+                <div className='text-base'>Total: <span className='font-semibold'>{formatCurrency(total)}</span></div>
                 <button
                   type='submit'
                   disabled={loading}
