@@ -47,6 +47,9 @@ module.exports = {
       boxShadow: {
         'pk-card': '0 0 10px 0 rgba(0,0,0,0.10)',
       },
+      fontFamily: {
+        sans: ['Inter, system-ui, sans-serif', ...defaultTheme.fontFamily.sans],
+      },
       colors: {
         green: emerald,
         blue: { DEFAULT: '#1C96A5', 500: '#3b82f6', 600: '#2563eb', 650: '#3758F9' },
