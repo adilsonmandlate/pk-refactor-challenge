@@ -136,6 +136,7 @@ const ReservationList: React.FC<{
       {error && (
         <div role='alert' className='mb-3 rounded-md border border-red-200 bg-red-50 p-3 text-red-700'>
           {error}
+          <button className='ml-3 underline' onClick={() => setPage(p => p)}>Tentar de novo</button>
         </div>
       )}
 
