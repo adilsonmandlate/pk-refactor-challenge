@@ -21,8 +21,9 @@ const ReservationDrawer: React.FC<{
   const [nights, setNights] = useState(1)
   const [fees, setFees] = useState(0)
   const [formError, setFormError] = useState<string | null>(null)
-  const [total, setTotal] = useState(0)
   const panelRef = useRef<HTMLDivElement | null>(null)
+
+  const total = data ? (data.basePrice || 0) * (nights || 0) + (fees || 0) : 0
 
   useEffect(() => {
     if (!open || !id) return
@@ -37,10 +38,6 @@ const ReservationDrawer: React.FC<{
         setLoading(false)
       })
   }, [open, id])
-
-  useEffect(() => {
-    if (data) setTotal((data.basePrice || 0) * (nights || 0) + (fees || 0))
-  }, [nights])
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
@@ -70,6 +67,9 @@ const ReservationDrawer: React.FC<{
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="reservation-title"
       aria-hidden={!open}
       className={classNames(
         'fixed inset-0 z-40 transition',
